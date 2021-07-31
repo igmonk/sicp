@@ -16,7 +16,7 @@
 
 (define (pt n k)
   (cond ((or (< k 0) (> k n)) 0)
-	((and (= n 0) (= k 0)) 1)
+	((or (= n 0) (= k 0)) 1)
 	(else (+ (pt (- n 1) (- k 1))
 		 (pt (- n 1) k)))))
 
