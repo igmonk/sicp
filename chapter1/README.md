@@ -13,3 +13,7 @@ If Lisp is not a mainstream language, why is it used as the framework for the di
 The most significant of these features is the fact that Lisp descriptions of processes, called procedures, can themselves be represented and manipulated as Lisp data. The importance of this is that there are powerful program-design techniques that rely on the ability to blur the traditional distinction between passive data and active processes. Lisp's flexibility in handling procedures as data makes it one of the most convenient languages in existence for exploring these techniques.
 
 The ability to represent procedures as data also makes Lisp an excellent language for writing programs that must manipulate other programs as data, such as the interpreters and compilers that support computer languages. Above and beyond these considerations, programming in Lisp is great fun.
+
+## Resources
+
+- [SICP - Building Abstractions with Procedures](https://mitpress.mit.edu/sites/default/files/sicp/full-text/book/book-Z-H-9.html)
