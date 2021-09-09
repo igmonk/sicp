@@ -21,4 +21,15 @@
         (iter (cdr l) (cons (car l) result))))
   (iter items '()))
 
+
+;; Below is another implementation of 'reverse' that makes use of the 'append' procedure
+;; and generates a recursive process.
+
+(define (reverse items)
+  (if (null? items)
+      items
+      (append (reverse (cdr items))
+              (list (car items)))))
+
+
 ;; (reverse (list 1 4 9 16 25)) ; (25 16 9 4 1)
