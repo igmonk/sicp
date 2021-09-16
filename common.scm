@@ -11,3 +11,5 @@
 
 (define (dec n)
   (- n 1))
+
+(define (identity x) x)
