@@ -3,19 +3,7 @@
 ;; Write a procedure 'fringe' that takes as argument a tree (represented as a list) and
 ;; returns a list whose elements are all the leaves of the tree arranged in left-to-right order.
 
-
-;; 1. Iterative
-
-(define (fringe x)
-  (define (iter l result)
-    (cond ((null? l) result)
-          ((not (pair? l)) (list l))
-          (else (append (iter (car l) result)
-                        (iter (cdr l) result)))))
-  (iter x '()))
-
-
-;; 2. Recursive
+(load "workbook.scm")
 
 (define (fringe x)
   (cond ((null? x) x)
