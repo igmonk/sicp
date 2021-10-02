@@ -24,13 +24,11 @@
 	     (f x)
 	     (f (+ x dx)))))
 
-(define (smooth-n f n)
-  (if (> n 1)
-      (smooth (smooth-n f (- n 1)))
-      (smooth f)))
-
 (define (average a b c)
   (/ (+ a b c) 3))
+
+(define (smooth-n f n)
+  ((repeated smooth n) f))
 
 ;; (inc 5)               ; 6
 ;; ((smooth inc) 5)      ; 6.
@@ -42,7 +40,7 @@
 
 ;; (square 2)              ; 4
 ;; ((smooth square) 2)     ; 4.000000000066667
-;; ((smooth-n square 5) 2) ; 4.000000000333333
+;; ((smooth-n square 5) 2) ; 4.000000033333335
 
 ;; Moving average:
 ;; https://en.wikipedia.org/wiki/Moving_average
