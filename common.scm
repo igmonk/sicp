@@ -32,3 +32,9 @@
 
 (define (divisible? n divisor)
   (= (remainder n divisor) 0))
+
+(define (accumulate op initial sequence)
+  (if (null? sequence)
+      initial
+      (op (car sequence)
+          (accumulate op initial (cdr sequence)))))
