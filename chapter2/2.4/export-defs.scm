@@ -9,8 +9,7 @@
 
 (define (get-export-def op type export-defs)
   (if (null? export-defs)
-      (error "No method for these types -- GET-EXPORT-DEF"
-             (list op type))
+      false
       (let ((def (car export-defs)))
         (if (and (equal? (export-def-op def) op)
                  (equal? (export-def-type def) type))
