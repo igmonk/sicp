@@ -106,7 +106,7 @@
            (list op type-tags)))
   (define (contains-empty-slots? seq)
     (cond ((null? seq) false)
-          ((or (null? (car seq)) (not (car seq))) true)
+          ((not (car seq)) true)
           (else
            (contains-empty-slots? (cdr seq)))))
   (define (get-coercion-fns-1 target-tag origin-tags)
@@ -184,14 +184,5 @@
                            complex-package-exports
                            scheme-number-ext-2-82-exports
                            complex-ext-2-82-exports)))
-
-(define (all-equal? type-tags)
-  (cond ((null? type-tags) true)
-        ((not (pair? type-tags)) true)
-        ((not (pair? (cdr type-tags))) true)
-        (else
-         (if (equal? (car type-tags) (cadr type-tags))
-             (all-equal? (cdr type-tags))
-             false))))
 
 (define (apply2 x y) (x y))
