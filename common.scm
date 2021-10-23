@@ -38,3 +38,11 @@
       initial
       (op (car sequence)
           (accumulate op initial (cdr sequence)))))
+
+(define (all-equal? seq)
+  (cond ((not (pair? seq)) true)
+        ((not (pair? (cdr seq))) true)
+        (else
+         (if (equal? (car seq) (cadr seq))
+             (all-equal? (cdr seq))
+             false))))
