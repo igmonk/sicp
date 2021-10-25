@@ -18,13 +18,17 @@
 ;;
 ;; ((repeated square 2) 5) ; 625
 
-(load "workbook.scm")
+(load "../../common.scm")
 (load "ex-1.42.scm")
 
 (define (repeated f n)
-  (if (> n 1)
+  (if (> n 0)
       (compose f (repeated f (- n 1)))
-      f))
+      identity))
+
+
+;; ((repeated square 0) 5) ; 5
+;; ((repeated square 1) 5) ; 25
 
 ;; ((repeated square 2) 5) ; 625
 ;; ((repeated square 4) 2) ; 65336
