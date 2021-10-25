@@ -1,4 +1,4 @@
-;; A set of useful definition used for exporting procedures
+;; A set of useful definitions used for exporting procedures
 ;; as an alternative to a stateful data structure
 ;; (for example, an operation-type table for data-directed programming).
 
@@ -15,3 +15,7 @@
                  (equal? (export-def-type def) type))
             (export-def-item def)
             (get-export-def op type (cdr export-defs))))))
+
+;; To be overwritten:
+(define (get op type)
+  (get-export-def op type '()))
