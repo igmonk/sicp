@@ -55,3 +55,10 @@
   (if (> n 0)
       (compose f (repeated f (- n 1)))
       identity))
+
+(define (variable? x) (symbol? x))
+
+(define (same-variable? v1 v2)
+  (and (variable? v1)
+       (variable? v2)
+       (eq? v1 v2)))
