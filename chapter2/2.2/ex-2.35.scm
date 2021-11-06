@@ -22,8 +22,7 @@
 ;; 'accumulate' sums up what is computed by 'map'.
 
 (define (count-leaves tree)
-  (accumulate (lambda (leaves-count acc)
-                (+ acc leaves-count))
+  (accumulate +
               0
               (map (lambda (sub-tree)
                      (if (pair? sub-tree)
