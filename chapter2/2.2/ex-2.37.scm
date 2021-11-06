@@ -35,7 +35,7 @@
 ;; Source:
 ;; https://mitpress.mit.edu/sites/default/files/sicp/full-text/book/book-Z-H-15.html#footnote_Temp_166
 
-(define _map map-n)
+(define _map map)
 
 
 ;; 1. Dot product
