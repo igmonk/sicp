@@ -17,9 +17,9 @@
 ;;     deep-reverse of the cdr of x.
 
 
-;; 1. Iterative
+;; 1. Recursive without append
 ;;
-;; Below, 'deep-reverse' is implemented using an iterative plan.
+;; Below, 'deep-reverse' is implemented without using the procedure append.
 ;; To reverse list/tree x, do the following:
 ;;   - if x is the empty list/tree, then the result is the accumulator 'result'
 ;;   - if x is a leaf, then the result is the leaf itself
