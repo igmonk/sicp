@@ -18,14 +18,10 @@
 
 
 (define (deep-eq? a b)
-  (cond ((and (not (pair? a))
-              (not (pair? b)))
-         (eq? a b))
-        ((and (pair? a) (pair? b))
-         (and (deep-eq? (car a) (car b))
-              (deep-eq? (cdr a) (cdr b))))
-        (else false)))
-
+  (if (and (pair? a) (pair? b))
+      (and (deep-eq? (car a) (car b))
+           (deep-eq? (cdr a) (cdr b)))
+      (eq? a b)))
 
 ;; (deep-eq? 1 1) ; true
 ;; (deep-eq? 1 2) ; false
