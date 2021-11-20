@@ -62,7 +62,7 @@
 ;; (define m1 (list (list 1 2) (list 3 4)))
 ;; (define m2 (list (list 5 6) (list 7 8)))
 ;; (define m3 (list (list 9 10) (list 11 12)))
-;;
+
 ;; below is shown that the associative property holds for matrix multiplication
 ;; whereas the commutative one does not:
 ;;
@@ -94,8 +94,8 @@
 ;;
 ;; initial: m1, sequence: (m2, m3)
 ;;
-;; (fold-right matrix-*-matrix m1 (list m2 m3)) ; ((543 737) (655 889))
-;; (fold-left matrix-*-matrix m1 (list m2 m3))  ; ((644 748) (706 820))
+;; (fold-right matrix-*-matrix m1 (list m2 m3)) ; ((477 710) (649 966))
+;; (fold-left matrix-*-matrix m1 (list m2 m3))  ; ((413 454) (937 1030))
 ;;
 ;; In case there is only one matrix involved, the result is the same:
 ;;
