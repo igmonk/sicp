@@ -1,6 +1,6 @@
 ;; Evaluator Test
 
-(load "../../../chapter3/3.3/table-obj-2d.scm")
+(load "../../chapter3/3.3/table-obj-2d.scm")
 (load "test-utils.scm")
 (load "evaluator.scm")
 
