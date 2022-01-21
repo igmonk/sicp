@@ -53,9 +53,9 @@
   (define (zero? z)
     (and (apply-generic 'equ? (real-part z) 0)
          (apply-generic 'equ? (imag-part z) 0)))
-  (define (neg z)
-    (make-from-real-imag (- (real-part z))
-                         (- (imag-part z))))
+  (define (neg-complex z)
+    (make-from-real-imag (neg (real-part z))
+                         (neg (imag-part z))))
   (define (project z) (real-part z))
 
   ;; interface to rest of the system
@@ -78,7 +78,8 @@
         (export-def 'mul5 types-arity-5 mul5)
         (export-def 'equ? '(complex complex) equ?)
         (export-def '=zero? '(complex) zero?)
-        (export-def 'neg '(complex) neg)
+        (export-def 'neg '(complex)
+                    (lambda (x) (tag (neg-complex x))))
         (export-def 'project '(complex) project)
         (export-def 'make-from-real-imag 'complex
                     (lambda (x y) (tag (make-from-real-imag x y))))

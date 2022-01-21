@@ -3,7 +3,6 @@
 ;; The procedure raise will fail if the necessary rational numbers
 ;; package is not installed.
 
-(load "../../common.scm")
 (load "../export-defs.scm")
 
 (define (install-integer-package)

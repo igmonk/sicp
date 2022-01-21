@@ -99,11 +99,15 @@
 ;; (neg 1)  ; -1
 ;; (neg -1) ; 1
 
-;; (neg (make-rational 1 5))  ; (-1 . 5)
-;; (neg (make-rational -1 5)) ; (1 . 5)
+;; (neg (make-rational 1 5))  ; (rational -1 . 5)
+;; (neg (make-rational -1 5)) ; (rational 1 . 5)
 
 ;; (neg 1.1)  ; (rational -11 . 10)
 ;; (neg -1.1) ; (rational 11 . 10)
 
-;; (neg (make-complex-from-real-imag 2 1))   ; (rectangular -2 . -1)
-;; (neg (make-complex-from-real-imag -2 -1)) ; (rectangular 2 . 1)
+;; (neg (make-complex-from-real-imag 2 1))   ; (complex rectangular -2 . -1)
+;; (neg (make-complex-from-real-imag -2 -1)) ; (complex rectangular 2 . 1)
+
+;; (neg (make-complex-from-real-imag
+;;       (make-rational 1 3)
+;;       (make-rational 1 7))) ; (complex rectangular (rational -1 . 3) rational -1 . 7)
