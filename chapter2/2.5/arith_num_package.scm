@@ -65,11 +65,11 @@
 (define (=zero? x) (apply-generic '=zero? x))
 (define (neg x) (apply-generic 'neg x))
 
-(define (sine x) (apply-generic 'sine x))      ;; Not defined for complex
-(define (cosine x) (apply-generic 'cosine x))  ;; Not defined for complex
-(define (square x) (apply-generic 'square x))  ;; Not defined for complex
-(define (sqrt x) (apply-generic 'sqrt x))      ;; Not defined for complex
-(define (atan2 x y) (apply-generic 'atan x y)) ;; Not defined for complex
+(define (sine x) (apply-generic 'sine x))       ;; Not defined for complex
+(define (cosine x) (apply-generic 'cosine x))   ;; Not defined for complex
+(define (square1 x) (apply-generic 'square x))  ;; Not defined for complex
+(define (sqrt1 x) (apply-generic 'sqrt x))      ;; Not defined for complex
+(define (atan2 x y) (apply-generic 'atan2 x y)) ;; Not defined for complex
 
 (define (raise x) (apply-generic 'raise x))
 (define (project x) (apply-generic 'project x))

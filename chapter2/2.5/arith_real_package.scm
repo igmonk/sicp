@@ -3,7 +3,6 @@
 ;; The procedures raise and project will fail if the necessary
 ;; complex and rational numbers packages are not installed.
 
-(load "../../common.scm")
 (load "../export-defs.scm")
 
 (define (install-real-package)

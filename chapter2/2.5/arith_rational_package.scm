@@ -1,6 +1,5 @@
 ;; Rational numbers package
 
-(load "../../common.scm")
 (load "../export-defs.scm")
 (load "./arith_lib.scm")
 
@@ -35,7 +34,8 @@
     (and (= (numer x) (numer y))
          (= (denom x) (denom y))))
   (define (zero? x) (= (numer x) 0))
-  (define (neg x) (make-rat (- (numer x)) (denom x)))
+  (define (neg-rational x)
+    (make-rat (neg (numer x)) (denom x)))
   (define (raise x)
     (exact->inexact (/ (numer x) (denom x))))
   (define (project x)
@@ -57,7 +57,8 @@
         (export-def 'mul5 types-arity-5 mul5)
         (export-def 'equ? '(rational rational) equ?)
         (export-def '=zero? '(rational) zero?)
-        (export-def 'neg '(rational) neg)
+        (export-def 'neg '(rational)
+                    (lambda (x) (tag (neg-rational x))))
         (export-def 'raise '(rational) raise)
         (export-def 'project '(rational) project)
         (export-def 'make 'rational
