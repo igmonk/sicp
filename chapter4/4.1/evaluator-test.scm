@@ -1,66 +1,17 @@
 ;; Evaluator Test
 
-(load "../../chapter3/3.3/table-obj-2d.scm")
 (load "test-utils.scm")
-(load "evaluator.scm")
-
-;; Load evaluator extensions
-(load "eval-quote.scm")
-(load "eval-assignment.scm")
-(load "eval-definition.scm")
-(load "eval-if.scm")
-(load "eval-lambda.scm")
-(load "eval-begin.scm")
-(load "eval-cond.scm")
-(load "eval-and.scm")
-(load "eval-or.scm")
-(load "eval-let.scm")
-(load "eval-let-star.scm")
-(load "eval-while.scm")
-(load "eval-undefine.scm")
-(load "eval-letrec.scm")
-(load "eval-unless.scm")
-
 
 ;; Create the global environment
 (define env (setup-environment))
+(define (reset-env!) (set! env (setup-environment)) 'ok)
 
-;; Create a dispatch table and evaluator
-(define dt (make-table))
-(define evaluator (make-evaluator dt))
-
-;; Define _eval
-(define _eval (evaluator '_eval))
-
-
-;; Extend the evaluator with the necessary forms
-(define (extend-evaluator)
-  (install-eval-quote evaluator)
-  (install-eval-assignment evaluator)
-  (install-eval-definition evaluator)
-  (install-eval-if evaluator)
-  (install-eval-lambda evaluator)
-  (install-eval-begin evaluator)
-  (install-eval-cond evaluator)
-  (install-eval-and evaluator)
-  (install-eval-and-d evaluator)
-  (install-eval-or evaluator)
-  (install-eval-or-d evaluator)
-  (install-eval-let evaluator)
-  (install-eval-let* evaluator)
-  (install-eval-while evaluator)
-  (install-eval-undefine evaluator)
-  (install-eval-letrec evaluator)
-  (install-eval-unless evaluator))
-
-(extend-evaluator)
+;; Create an evaluator
+(define evaluator (create-new-evaluator))
+(define (eval-exp exp) ((evaluator '_eval) exp env))
 
 ;; Run REPL
-(driver-loop env _eval)
-
-
-(define (eval-exp exp) (_eval exp env))
-(define (reset-env!) (set! env (setup-environment)) 'ok)
+;; (driver-loop env (evaluator '_eval))
 
 
 ;; Test: self-evaluating
