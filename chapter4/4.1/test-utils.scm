@@ -1,7 +1,54 @@
 ;; Test utilities
 
+(load "../../chapter3/3.3/table-obj-2d.scm")
+
 (load "environment.scm")
 (load "procedure.scm")
+(load "evaluator.scm")
+
+;; Load evaluator extensions
+(load "eval-quote.scm")
+(load "eval-assignment.scm")
+(load "eval-definition.scm")
+(load "eval-if.scm")
+(load "eval-lambda.scm")
+(load "eval-begin.scm")
+(load "eval-cond.scm")
+(load "eval-and.scm")
+(load "eval-or.scm")
+(load "eval-let.scm")
+(load "eval-let-star.scm")
+(load "eval-while.scm")
+(load "eval-undefine.scm")
+(load "eval-letrec.scm")
+(load "eval-unless.scm")
+
+
+;; Create a new evaluator and extend it with the necessary forms
+(define (create-new-evaluator)
+  (let ((evaluator (make-evaluator (make-table))))
+    (extend-evaluator evaluator)
+    evaluator))
+
+;; Extend the evaluator with the necessary forms
+(define (extend-evaluator evaluator)
+  (install-eval-quote evaluator)
+  (install-eval-assignment evaluator)
+  (install-eval-definition evaluator)
+  (install-eval-if evaluator)
+  (install-eval-lambda evaluator)
+  (install-eval-begin evaluator)
+  (install-eval-cond evaluator)
+  (install-eval-and evaluator)
+  (install-eval-and-d evaluator)
+  (install-eval-or evaluator)
+  (install-eval-or-d evaluator)
+  (install-eval-let evaluator)
+  (install-eval-let* evaluator)
+  (install-eval-while evaluator)
+  (install-eval-undefine evaluator)
+  (install-eval-letrec evaluator)
+  (install-eval-unless evaluator))
 
 ;; Setup environment
 (define (setup-environment)
