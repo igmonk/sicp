@@ -48,12 +48,16 @@
 ;; which returns a nonnegative number less than its input.
 
 (define (random-in-range low high)
-  (let ((range (- high low)))
-    (+ low (random range))))
+  (let ((range (abs (- high low))))
+    (+ (min low high) (random range))))
 
 ;; (random-in-range 10 15) ; 11
 ;; (random-in-range 10 15) ; 13
 ;; (random-in-range 10 15) ; 12
+
+;; (random-in-range 15 10) ; 14
+;; (random-in-range 15 10) ; 10
+;; (random-in-range 15 10) ; 11
 
 
 (load "workbook.scm")
@@ -95,7 +99,7 @@
 ;;
 ;; (define p1 (make-pred 5 7 3))
 ;; (estimate-integral p1 2 8 4 10 1000) ; 3438/125 = 27,504
-
+;; (estimate-integral p1 8 2 10 4 1000) ; 3231/125 = 25,848
 
 ;; Test: pi estimate
 ;;
