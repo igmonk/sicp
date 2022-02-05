@@ -7,12 +7,13 @@
 (define (install-eval-if evaluator)
   (let ((_eval (evaluator '_eval))
         (_analyze (evaluator '_analyze))
+        (actual-value (evaluator 'actual-value))
         (extend-eval (evaluator 'extend-eval))
         (extend-analyze (evaluator 'extend-analyze))
         (def-constructor (evaluator 'def-constructor)))
 
     (define (eval-if exp env)
-      (if (true? (_eval (if-predicate exp) env))
+      (if (true? (actual-value (if-predicate exp) env))
           (_eval (if-consequent exp) env)
           (_eval (if-alternative exp) env)))
 
