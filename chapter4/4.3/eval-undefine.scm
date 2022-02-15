@@ -14,9 +14,9 @@
 
     (define (analyze-undefine exp)
       (let ((var (undefine-var exp)))
-        (lambda (env)
+        (lambda (env succeed fail)
           (undefine-variable! var env)
-          'ok)))
+          (succeed 'ok fail))))
 
     (define (undefine-var exp)
       (cadr exp))

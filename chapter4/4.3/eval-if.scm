@@ -1,6 +1,6 @@
 ;; Eval If
 ;;
-;; Extends the given evaluator with if expressions.
+;; Extends the given amb evaluator with if expressions.
 
 (load "predicates.scm")
 
@@ -20,10 +20,16 @@
       (let ((pproc (_analyze (if-predicate exp)))
             (cproc (_analyze (if-consequent exp)))
             (aproc (_analyze (if-alternative exp))))
-        (lambda (env)
-          (if (true? (pproc env))
-              (cproc env)
-              (aproc env)))))
+        (lambda (env succeed fail)
+          (pproc env
+                 ;; success continuation for evaluating the predicate
+                 ;; to obtain pred-value
+                 (lambda (pred-value fail2)
+                   (if (true? pred-value)
+                       (cproc env succeed fail2)
+                       (aproc env succeed fail2)))
+                 ;; failure continuation for evaluating the predicate
+                 fail))))
 
     (define (make-if predicate consequent alternative)
       (list 'if predicate consequent alternative))

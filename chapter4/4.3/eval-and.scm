@@ -11,7 +11,8 @@
   (let ((_eval (evaluator '_eval))
         (_analyze (evaluator '_analyze))
         (extend-eval (evaluator 'extend-eval))
-        (extend-analyze (evaluator 'extend-analyze)))
+        (extend-analyze (evaluator 'extend-analyze))
+        (def-constructor (evaluator 'def-constructor)))
 
     (define (eval-and exp env)
       (eval-and-exps (and-exps exp) env))
@@ -30,21 +31,27 @@
     (define (analyze-and-exps exps)
       (if (null? exps)
           (let ((true-proc (_analyze 'true)))
-            (lambda (env) (true-proc env)))
+            (lambda (env succeed fail)
+              (true-proc env succeed fail)))
           (let ((first-proc (_analyze (first-exp exps)))
                 (rest-proc (analyze-and-exps (rest-exps exps))))
             (if (last-exp? exps)
-                (lambda (env) (first-proc env))
-                (lambda (env)
-                  (let ((first (first-proc env)))
-                    (if (not first)
-                        first ;; false value (short-circuit eval)
-                        (rest-proc env))))))))
-    
+                (lambda (env succeed fail)
+                  (first-proc env succeed fail))
+                (lambda (env succeed fail)
+                  (first-proc env
+                              (lambda (first fail2)
+                                (if (not first)
+                                    (succeed first fail2) ;; false value (short-circuit eval)
+                                    (rest-proc env succeed fail2)))
+                              fail))))))
+
+    (define (make-and exps) (cons 'and exps))
     (define (and-exps exp) (cdr exp))
 
     (extend-eval 'and eval-and)
-    (extend-analyze 'and analyze-and)))
+    (extend-analyze 'and analyze-and)
+    (def-constructor 'make-and make-and)))
 
 
 ;; 2. 'and' as a derived expression (using cond)

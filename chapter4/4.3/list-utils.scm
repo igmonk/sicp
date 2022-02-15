@@ -49,3 +49,22 @@
 ;;   two empty lists when its argument is the empty list
 ;;   In contrast, the recursive decouple-pairs returns just
 ;;   the empty list (with no inner elements).
+
+
+(define (list-except l k)
+  (cond ((null? l) l)
+        ((>= k (length l))
+         (error "The index goes beyond the list -- LIST-EXCEPT"
+                (list l k)))
+        (else (append (list-head l k)
+                      (list-tail l (+ k 1))))))
+
+;; (list-except '() 0) ; ()
+;; (list-except '() 1) ; ()
+
+;; (list-except '(a) 0) ; ()
+;; (list-except '(a) 1) ; error: The index goes beyond the list
+
+;; (list-except '(a b c) 0) ; (b c)
+;; (list-except '(a b c) 1) ; (a c)
+;; (list-except '(a b c) 2) ; (a b)
