@@ -1,5 +1,6 @@
 ;; Test utilities
 
+(load "../../common.scm")
 (load "../../chapter3/3.3/table-obj-2d.scm")
 
 (load "environment.scm")
@@ -16,12 +17,18 @@
 (load "eval-cond.scm")
 (load "eval-and.scm")
 (load "eval-or.scm")
+(load "eval-xor.scm")
 (load "eval-let.scm")
 (load "eval-let-star.scm")
 (load "eval-while.scm")
 (load "eval-undefine.scm")
 (load "eval-letrec.scm")
 (load "eval-unless.scm")
+(load "eval-amb.scm")
+(load "eval-ramb.scm")
+(load "eval-passignment.scm")
+(load "eval-if-fail.scm")
+(load "eval-require.scm")
 
 
 ;; Create a new evaluator and extend it with the necessary forms
@@ -43,12 +50,18 @@
   (install-eval-and-d evaluator)
   (install-eval-or evaluator)
   (install-eval-or-d evaluator)
+  (install-eval-xor evaluator)
   (install-eval-let evaluator)
   (install-eval-let* evaluator)
   (install-eval-while evaluator)
   (install-eval-undefine evaluator)
   (install-eval-letrec evaluator)
-  (install-eval-unless evaluator))
+  (install-eval-unless evaluator)
+  (install-eval-amb evaluator)
+  (install-eval-ramb evaluator)
+  (install-eval-passignment evaluator)
+  (install-eval-if-fail evaluator)
+  (install-eval-require evaluator))
 
 ;; Setup environment
 (define (setup-environment)
@@ -77,6 +90,25 @@
         (list '/ /)
         (list '> >)
         (list '< <)
+        (list '>= >=)
+        (list '<= <=)
+        (list 'list list)
+        (list 'member member)
+        (list 'prime? prime?)
+        (list 'square square)
+        (list 'sqrt sqrt)
+        (list 'integer? integer?)
+        (list 'abs abs)
+        (list 'memq memq)
+        (list 'member member)
+        (list 'list-ref list-ref)
+        (list 'length length)
+        (list 'random random)
+        (list 'min min)
+        (list 'max max)
+        (list 'display display)
+        (list 'even? even?)
+        (list 'odd? odd?)
         ;; <more primitives>
         ))
 
@@ -90,16 +122,35 @@
 
 ;; REPL
 
-(define input-prompt ";;; M-Eval input:")
-(define output-prompt ";;; M-Eval value:")
+(define input-prompt ";;; Amb-Eval input:")
+(define output-prompt ";;; Amb-Eval value:")
 
-(define (driver-loop env eval-fn)
-  (prompt-for-input input-prompt)
-  (let ((input (read)))
-    (let ((output (eval-fn input env)))
-      (announce-output output-prompt)
-      (user-print output)))
-  (driver-loop env eval-fn))
+(define (driver-loop env ambeval-fn)
+  (define (internal-loop try-again)
+    (prompt-for-input input-prompt)
+    (let ((input (read)))
+      (if (eq? input 'try-again)
+          (try-again)
+          (begin
+            (newline)
+            (display ";;; Starting a new problem ")
+            (ambeval-fn input
+                        env
+                        ;; ambeval success
+                        (lambda (val next-alternative)
+                          (announce-output output-prompt)
+                          (user-print val)
+                          (internal-loop next-alternative))
+                        ;; ambeval failure
+                        (lambda ()
+                          (announce-output ";;; There are no more values of")
+                          (user-print input)
+                          (driver-loop env ambeval-fn)))))))
+  (internal-loop
+   (lambda ()
+     (newline)
+     (display ";;; There is no current problem")
+     (driver-loop env ambeval-fn))))
 
 (define (prompt-for-input str)
   (newline)

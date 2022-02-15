@@ -11,7 +11,8 @@
   (let ((_eval (evaluator '_eval))
         (_analyze (evaluator '_analyze))
         (extend-eval (evaluator 'extend-eval))
-        (extend-analyze (evaluator 'extend-analyze)))
+        (extend-analyze (evaluator 'extend-analyze))
+        (def-constructor (evaluator 'def-constructor)))
 
     (define (eval-or exp env)
       (eval-or-exps (or-exps exp) env))
@@ -30,19 +31,24 @@
     (define (analyze-or-exps exps)
       (if (null? exps)
           (let ((false-proc (_analyze 'false)))
-            (lambda (env) (false-proc env)))
+            (lambda (env succeed fail)
+              (false-proc env succeed fail)))
           (let ((first-proc (_analyze (first-exp exps)))
                 (rest-proc (analyze-or-exps (rest-exps exps))))
-            (lambda (env)
-              (let ((first (first-proc env)))
-                (if first
-                    first ;; true value (short-circuit eval)
-                    (rest-proc env)))))))
+            (lambda (env succeed fail)
+              (first-proc env
+                          (lambda (first fail2)
+                            (if first
+                                (succeed first fail2) ;; true value (short-circuit eval)
+                                (rest-proc env succeed fail2)))
+                          fail)))))
 
+    (define (make-or exps) (cons 'or exps))
     (define (or-exps exp) (cdr exp))
 
     (extend-eval 'or eval-or)
-    (extend-analyze 'or analyze-or)))
+    (extend-analyze 'or analyze-or)
+    (def-constructor 'make-or make-or)))
 
 
 ;; 2. 'or' as a derived expression (using cond)

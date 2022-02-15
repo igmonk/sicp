@@ -1,6 +1,6 @@
 ;; Eval Quote
 ;;
-;; Extends the given evaluator with quote expressions.
+;; Extends the given amb evaluator with quote expressions.
 
 (define (install-eval-quote evaluator)
 
@@ -9,7 +9,8 @@
 
   (define (analyze-quote exp)
     (let ((qval (text-of-quotation exp)))
-      (lambda (env) qval)))
+      (lambda (env succeed fail)
+        (succeed qval fail))))
 
   (define (text-of-quotation exp) (cadr exp))
 

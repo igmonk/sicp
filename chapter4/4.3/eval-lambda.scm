@@ -1,6 +1,6 @@
 ;; Eval Lambda
 ;;
-;; Extends the given evaluator with lambda expressions.
+;; Extends the given amb evaluator with lambda expressions.
 
 (load "procedure.scm")
 
@@ -20,7 +20,9 @@
     (define (analyze-lambda exp)
       (let ((vars (lambda-parameters exp))
             (bproc (analyze-sequence (lambda-body exp))))
-        (lambda (env) (make-procedure vars bproc env))))
+        (lambda (env succeed fail)
+          (succeed (make-procedure vars bproc env)
+                   fail))))
     
     (define (make-lambda parameters body)
       (cons 'lambda (cons parameters body)))

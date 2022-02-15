@@ -1,6 +1,6 @@
 ;; Eval Definition
 ;;
-;; Extends the given evaluator with definition expressions.
+;; Extends the given amb evaluator with definition expressions.
 
 (load "environment.scm")
 
@@ -21,9 +21,12 @@
     (define (analyze-definition exp)
       (let ((var (definition-variable exp))
             (vproc (_analyze (definition-value exp))))
-        (lambda (env)
-          (define-variable! var (vproc env) env)
-          'ok)))
+        (lambda (env succeed fail)
+          (vproc env
+                 (lambda (val fail2)
+                   (define-variable! var val env)
+                   (succeed 'ok fail2))
+                 fail))))
     
     (define (definition-variable exp)
       (if (symbol? (cadr exp))

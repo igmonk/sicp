@@ -1,6 +1,6 @@
-;; Evaluator
+;; Amb Evaluator
 ;;
-;; The evaluator whose dispatch is done in data-directed style.
+;; The Amb evaluator whose dispatch is done in data-directed style.
 ;;
 ;; The evaluation process is be described as the interplay between
 ;; two procedures: 'eval' and 'apply'.
@@ -15,11 +15,11 @@
 (define (make-evaluator edt)
   (let ((get (edt 'lookup-proc))
         (put (edt 'insert-proc!)))
-
-    ;; Eval with preceding syntactic analysis
-    (define (_eval exp env)
-      ((_analyze exp) env))
-
+    
+    ;; Amb eval with preceding syntactic analysis
+    (define (ambeval exp env succeed fail)
+      ((_analyze exp) env succeed fail))
+    
     ;; Eval mixed with syntactic analysis
     ;; (define (_eval exp env)
     ;;   (cond ((self-evaluating? exp) exp)
@@ -57,20 +57,44 @@
     (define (analyze-application exp)
       (let ((fproc (_analyze (operator exp)))
             (aprocs (map _analyze (operands exp))))
-        (lambda (env)
-          (execute-application (fproc env)
-                               (map (lambda (aproc) (aproc env))
-                                    aprocs)))))
+        (lambda (env succeed fail)
+          (fproc env
+                 (lambda (proc fail2)
+                   (get-args aprocs
+                             env
+                             (lambda (args fail3)
+                               (execute-application proc args succeed fail3))
+                             fail2))
+                 fail))))
 
-    (define (execute-application proc args)
+    (define (get-args aprocs env succeed fail)
+      (if (null? aprocs)
+          (succeed '() fail)
+          ((car aprocs)
+           env
+           ;; success continuation for this aproc
+           (lambda (arg fail2)
+             (get-args (cdr aprocs)
+                       env
+                       ;; success continuation for recursive
+                       (lambda (args fail3)
+                         (succeed (cons arg args)
+                                  fail3))
+                       fail2))
+           fail)))
+
+    (define (execute-application proc args succeed fail)
       (cond ((primitive-procedure? proc)
-             (apply-primitive-procedure proc args))
+             (succeed (apply-primitive-procedure proc args)
+                      fail))
             ((compound-procedure? proc)
              ((procedure-body proc)
               (extend-environment
                (procedure-parameters proc)
                args
-               (procedure-environment proc))))
+               (procedure-environment proc))
+              succeed
+              fail))
             (else
              (error "Unknown procedure type -- EXECUTE-APPLICATION"
                     proc))))
@@ -87,12 +111,15 @@
             (else false)))
 
     (define (analyze-self-evaluating exp)
-      (lambda (env) exp))
+      (lambda (env succeed fail)
+        (succeed exp fail)))
 
     (define (variable? exp) (symbol? exp))
 
     (define (analyze-variable exp)
-      (lambda (env) (lookup-variable-value exp env)))
+      (lambda (env succeed fail)
+        (succeed (lookup-variable-value exp env)
+                 fail)))
 
     (define (classify exp type)
       (if (pair? exp)
@@ -107,7 +134,13 @@
 
     (define (analyze-sequence exps)
       (define (sequentially proc1 proc2)
-        (lambda (env) (proc1 env) (proc2 env)))
+        (lambda (env succeed fail)
+          (proc1 env
+                 ;; success continuation for calling a
+                 (lambda (proc1-value fail2)
+                   (proc2 env succeed fail2))
+                 ;; failure continuation for calling a
+                 fail)))
       (define (loop first-proc rest-procs)
         (if (null? rest-procs)
             first-proc
@@ -144,11 +177,12 @@
     
     ;; Interface to the rest of the system
     (define (dispatch m)
-      (cond ((eq? m '_eval) _eval)
+      (cond ((eq? m '_eval) "UNDEFINED. Use ambeval instead.")
             ((eq? m '_analyze) _analyze)
             ((eq? m '_apply) _apply)
             ((eq? m '_eval-seq) eval-sequence)
             ((eq? m '_analyze-seq) analyze-sequence)
+            ((eq? m 'ambeval) ambeval)
             ((eq? m 'extend-eval) extend-eval)
             ((eq? m 'extend-analyze) extend-analyze)
             ((eq? m 'def-constructor) def-constructor)
