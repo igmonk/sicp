@@ -1,12 +1,10 @@
 ;; Explicit-Control Evaluator
 
 ;; cd to sicp/chapter5/5.2
-(cd "/Users/igor/dev/iharland/sicp/chapter5/5.2")
 (load "machine.scm")
 (load "basic-machine-ext.scm")
 
 ;; cd to sicp/chapter5/5.4
-(cd "/Users/igor/dev/iharland/sicp/chapter5/5.4")
 (load "evaluator-operations.scm")
 
 (define ec-eval-machine
