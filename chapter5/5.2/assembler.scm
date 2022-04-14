@@ -100,9 +100,10 @@
       (let ((op (lookup-prim (operation-exp-op exp) (machine 'operations)))
             (aprocs
              (map (lambda (e)
-                    (if (label-exp? e)
-                        (error "Operations can't be used with labels -- ASSEMBLE")
-                        (make-primitive-proc e labels)))
+                    (make-primitive-proc e labels))
+                    ;; (if (label-exp? e) ; Causes compiled code to throw an error
+                    ;;     (error "Operations can't be used with labels -- ASSEMBLE")
+                    ;;     (make-primitive-proc e labels)))
                   (operation-exp-operands exp))))
         (lambda ()
           (apply op (map (lambda (p) (p)) aprocs)))))
