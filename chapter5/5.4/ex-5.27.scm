@@ -13,6 +13,7 @@
 ;; the total number of pushes used in evaluating n! for n > 1.
 
 ;; Start the evaluator machine and run the driver loop:
+(set-register-contents! ec-eval-machine 'flag false)
 (start ec-eval-machine)
 
 (factorial 1) ; (total-pushes = 16 maximum-depth = 8)

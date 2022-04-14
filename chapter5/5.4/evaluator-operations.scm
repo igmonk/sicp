@@ -23,6 +23,10 @@
         (list 'null? null?)
         (list 'car car)
         (list 'cdr cdr)
+        (list 'cons cons)
+        (list 'list list)
+        (list 'append append)
+        (list 'reverse reverse)
 
         (list 'true? true?)
         (list 'false? false?)
@@ -87,5 +91,10 @@
         (list 'user-print user-print)
 
         (list 'no-more-exps? no-more-exps?)
+
+        (list 'make-compiled-procedure make-compiled-procedure)
+        (list 'compiled-procedure? compiled-procedure?)
+        (list 'compiled-procedure-entry compiled-procedure-entry)
+        (list 'compiled-procedure-env compiled-procedure-env)
 
         ))
