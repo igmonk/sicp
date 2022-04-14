@@ -37,4 +37,9 @@
     ((machine 'install-operations) ops)
     ((machine 'install-instruction-sequence)
      ((assembler 'assemble) controller-text))
-    machine))
+
+    (define (dispatch message)
+      (cond ((eq? message 'assembler) assembler)
+            (else (machine message))))
+
+    dispatch))
