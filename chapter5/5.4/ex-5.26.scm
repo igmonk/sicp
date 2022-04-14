@@ -19,6 +19,7 @@
 ;; required to compute n! for each of these values.
 
 ;; Start the evaluator machine and run the driver loop:
+(set-register-contents! ec-eval-machine 'flag false)
 (start ec-eval-machine)
 
 
