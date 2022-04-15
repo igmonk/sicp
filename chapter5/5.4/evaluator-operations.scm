@@ -1,12 +1,12 @@
 ;; Explicit-Control Evaluator Operations
 
-(load "list-utils.scm")
-(load "operations.scm")
-(load "procedure.scm")
-(load "predicates.scm")
-(load "environment.scm")
-(load "repl-utils.scm")
-(load "env-ext.scm")
+(load "../5.4/list-utils.scm")
+(load "../5.4/operations.scm")
+(load "../5.4/procedure.scm")
+(load "../5.4/predicates.scm")
+(load "../5.4/environment.scm")
+(load "../5.4/repl-utils.scm")
+(load "../5.4/env-ext.scm")
 
 (define eceval-operations
   (list (list 'self-evaluating? self-evaluating?)

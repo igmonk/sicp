@@ -1,6 +1,6 @@
 ;; Environment Extras
 
-(load "environment.scm")
+(load "../5.4/environment.scm")
 
 (define (setup-environment)
   (let ((initial-env

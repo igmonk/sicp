@@ -1,11 +1,9 @@
 ;; Explicit-Control Evaluator
 
-;; cd to sicp/chapter5/5.2
-(load "machine.scm")
-(load "basic-machine-ext.scm")
+(load "../5.2/machine.scm")
+(load "../5.2/basic-machine-ext.scm")
 
-;; cd to sicp/chapter5/5.4
-(load "evaluator-operations.scm")
+(load "../5.4/evaluator-operations.scm")
 
 (define ec-eval-machine
   (make-machine
@@ -165,8 +163,10 @@
      ;;
      ;; The saved value of 'continue' is on the stack.
      ;;
-     ;; Either the procedure to be applied is a primitive
-     ;; or it is a compound procedure.
+     ;; The procedure to be applied is one of
+     ;; - primitive
+     ;; - compound
+     ;; - compiled
      apply-dispatch
      (test (op primitive-procedure?) (reg proc))
      (branch (label primitive-apply))

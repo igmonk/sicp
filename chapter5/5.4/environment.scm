@@ -7,8 +7,8 @@
 ;; Each frame of an environment is represented as
 ;; a list of bindings, where each binding is a name-value pair.
 
-(load "frame.scm")
-(load "frame-binding.scm")
+(load "../5.4/frame.scm")
+(load "../5.4/frame-binding.scm")
 
 (define (make-environment)
   (make-environment-with (make-empty-frame) '()))

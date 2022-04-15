@@ -1,6 +1,6 @@
 ;; REPL Utils
 
-(load "procedure.scm")
+(load "../5.4/procedure.scm")
 
 (define (prompt-for-input str)
   (newline)
