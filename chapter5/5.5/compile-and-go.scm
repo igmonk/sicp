@@ -1,24 +1,25 @@
 ;; Interfacing Compiled Code to the Evaluator
-;;
-;; Requires the following definitions:
-;; - ec-eval-machine (& start, set-register-contents!)
-;; - compile (& statements)
-;; - setup-environment
-;;
-;; Go to Explicit-Control Evaluator (evaluator-machine.scm) and
-;; load the necessary definitions as stated there.
-;;
+
+(load "../5.2/basic-machine-ext.scm")
+
+(load "../5.4/evaluator-machine.scm")
+(load "../5.4/env-ext.scm")
+
+(load "instruction-seq.scm")
+
 ;; Note: the following error might get thrown (depends on
 ;; whether exercise 5.9 was done or not):
 ;;
 ;; ;Operations can't be used with labels -- ASSEMBLE
 ;;
-;; To get rid of this error, machine must be allowed
-;; to operate on labels (make-operation-proc in assembler.scm).
+;; To get rid of this error, machine must be allowed to
+;; operate on labels (see make-operation-proc in
+;; ../5.2/assembler.scm).
 
 (define (assemble-object-code object-code)
   (((ec-eval-machine 'assembler) 'assemble) object-code))
 
+;; Requires 'compile' to be defined
 (define (compile-and-go exp)
   (let* ((object-code (statements (compile exp 'val 'return)))
          (instructions (assemble-object-code object-code)))
