@@ -6,6 +6,12 @@
 ;; Start the evaluator and define the iterative factorial procedure
 ;; from section 1.2.1:
 
+(load "evaluator-machine.scm")
+
+;; Start the evaluator machine and run the driver loop:
+(set-register-contents! ec-eval-machine 'flag false)
+(start ec-eval-machine)
+
 (define (factorial n)
   (define (iter product counter)
     (if (> counter n)
@@ -17,10 +23,6 @@
 ;; Run the procedure with some small values of n.
 ;; Record the maximum stack depth and the number of pushes
 ;; required to compute n! for each of these values.
-
-;; Start the evaluator machine and run the driver loop:
-(set-register-contents! ec-eval-machine 'flag false)
-(start ec-eval-machine)
 
 
 ;; a. You will find that the maximum depth required to evaluate n!

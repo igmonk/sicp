@@ -2,6 +2,12 @@
 ;;
 ;; Monitor the stack operations in the tree-recursive Fibonacci computation:
 
+(load "evaluator-machine.scm")
+
+;; Start the evaluator machine and run the driver loop:
+(set-register-contents! ec-eval-machine 'flag false)
+(start ec-eval-machine)
+
 (define (fib n)
   (if (< n 2)
       n
@@ -24,10 +30,6 @@
 ;;    Then show that S(n) can be expressed as a Fib(n + 1) + b
 ;;    and give the values of a and b.
 
-
-;; Start the evaluator machine and run the driver loop:
-(set-register-contents! ec-eval-machine 'flag false)
-(start ec-eval-machine)
 
 (fib 2) ; (total-pushes = 72 maximum-depth = 13)
 (fib 3) ; (total-pushes = 128 maximum-depth = 18)

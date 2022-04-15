@@ -3,6 +3,12 @@
 ;; For comparison with exercise 5.26, explore the behavior of
 ;; the following procedure for computing factorials recursively:
 
+(load "evaluator-machine.scm")
+
+;; Start the evaluator machine and run the driver loop:
+(set-register-contents! ec-eval-machine 'flag false)
+(start ec-eval-machine)
+
 (define (factorial n)
   (if (= n 1)
       1
@@ -12,9 +18,6 @@
 ;; as a function of n, the maximum depth of the stack and
 ;; the total number of pushes used in evaluating n! for n > 1.
 
-;; Start the evaluator machine and run the driver loop:
-(set-register-contents! ec-eval-machine 'flag false)
-(start ec-eval-machine)
 
 (factorial 1) ; (total-pushes = 16 maximum-depth = 8)
 (factorial 2) ; (total-pushes = 48 maximum-depth = 13)
