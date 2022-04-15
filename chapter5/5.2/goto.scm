@@ -5,9 +5,9 @@
 ;; there is no condition to check - the pc is always
 ;; set to the new destination.
 
-(load "register.scm")
-(load "label.scm")
-(load "pc.scm")
+(load "../5.2/register.scm")
+(load "../5.2/label.scm")
+(load "../5.2/pc.scm")
 
 (define (install-goto assembler)
   (let ((extend-assemble (assembler 'extend-assemble))

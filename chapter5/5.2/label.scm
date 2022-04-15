@@ -1,6 +1,6 @@
 ;; Label
 
-(load "list-utils.scm")
+(load "../5.2/list-utils.scm")
 
 (define (make-label-entry label-name insts)
   (cons label-name insts))

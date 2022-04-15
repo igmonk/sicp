@@ -7,9 +7,9 @@
 ;; - advances the 'pc'
 ;;   (if the branch is not taken)
 
-(load "register.scm")
-(load "label.scm")
-(load "pc.scm")
+(load "../5.2/register.scm")
+(load "../5.2/label.scm")
+(load "../5.2/pc.scm")
 
 (define (install-branch assembler)
   (let ((extend-assemble (assembler 'extend-assemble))
