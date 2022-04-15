@@ -4,8 +4,8 @@
 ;; At simulation time, the action procedure is executed and
 ;; the pc advanced.
 
-(load "operation.scm")
-(load "pc.scm")
+(load "../5.2/operation.scm")
+(load "../5.2/pc.scm")
 
 (define (install-perform assembler)
   (let ((extend-assemble (assembler 'extend-assemble))

@@ -8,9 +8,9 @@
 ;; the result is assigned to the flag register, and
 ;; the pc is advanced.
 
-(load "register.scm")
-(load "operation.scm")
-(load "pc.scm")
+(load "../5.2/register.scm")
+(load "../5.2/operation.scm")
+(load "../5.2/pc.scm")
 
 (define (install-test assembler)
   (let ((extend-assemble (assembler 'extend-assemble))

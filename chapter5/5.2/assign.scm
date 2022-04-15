@@ -6,9 +6,9 @@
 ;; no arguments which will be evaluated during the simulation
 ;; to produce the actual value to be assigned to the register.
 
-(load "register.scm")
-(load "operation.scm")
-(load "pc.scm")
+(load "../5.2/register.scm")
+(load "../5.2/operation.scm")
+(load "../5.2/pc.scm")
 
 (define (install-assign assembler)
   (let ((extend-assemble (assembler 'extend-assemble))

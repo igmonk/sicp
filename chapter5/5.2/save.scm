@@ -2,9 +2,9 @@
 ;;
 ;; The stack instruction 'save'.
 
-(load "register.scm")
-(load "stack.scm")
-(load "pc.scm")
+(load "../5.2/register.scm")
+(load "../5.2/stack.scm")
+(load "../5.2/pc.scm")
 
 (define (install-save assembler)
   (let ((extend-assemble (assembler 'extend-assemble)))

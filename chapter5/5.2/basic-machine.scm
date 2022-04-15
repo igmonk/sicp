@@ -38,9 +38,9 @@
 ;; All other instructions simply advance pc, making it point to
 ;; the next instruction in the sequence.
 
-(load "register.scm")
-(load "stack.scm")
-(load "instruction.scm")
+(load "../5.2/register.scm")
+(load "../5.2/stack.scm")
+(load "../5.2/instruction.scm")
 
 (define (make-new-machine)
   (let ((pc (make-register 'pc))

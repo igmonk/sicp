@@ -7,16 +7,16 @@
 ;; to include the registers, operations, and controller of
 ;; the particular machine being defined.
 
-(load "basic-machine.scm")
-(load "assembler.scm")
+(load "../5.2/basic-machine.scm")
+(load "../5.2/assembler.scm")
 
-(load "assign.scm")
-(load "test.scm")
-(load "branch.scm")
-(load "goto.scm")
-(load "save.scm")
-(load "restore.scm")
-(load "perform.scm")
+(load "../5.2/assign.scm")
+(load "../5.2/test.scm")
+(load "../5.2/branch.scm")
+(load "../5.2/goto.scm")
+(load "../5.2/save.scm")
+(load "../5.2/restore.scm")
+(load "../5.2/perform.scm")
 
 (define (make-machine register-names ops controller-text)
   (let* ((machine (make-new-machine))

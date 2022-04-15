@@ -34,7 +34,7 @@
 
 ;; Register Syntax
 
-(load "list-utils.scm")
+(load "../5.2/list-utils.scm")
 
 (define (register-exp? exp) (tagged-list? exp 'reg))
 (define (register-exp-reg exp) (cadr exp))

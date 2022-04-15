@@ -1,6 +1,6 @@
 ;; Operation
 
-(load "list-utils.scm")
+(load "../5.2/list-utils.scm")
 
 (define (operation-exp? exp)
   (and (pair? exp) (tagged-list? (car exp) 'op)))

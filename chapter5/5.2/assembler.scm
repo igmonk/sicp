@@ -14,11 +14,11 @@
 
 
 (load "../../chapter3/3.3/table-obj-2d.scm")
-(load "register.scm")
-(load "instruction.scm")
-(load "label.scm")
-(load "constant.scm")
-(load "operation.scm")
+(load "../5.2/register.scm")
+(load "../5.2/instruction.scm")
+(load "../5.2/label.scm")
+(load "../5.2/constant.scm")
+(load "../5.2/operation.scm")
 
 ;; The assemble procedure takes the controller text and the machine
 ;; model as arguments and returns the instruction sequence to be
