@@ -9,10 +9,8 @@
 ;; primitive operations.
 
 
-;; cd to sicp/chapter5/5.2
-
-(load "machine.scm")
-(load "basic-machine-ext.scm")
+(load "../5.2/machine.scm")
+(load "../5.2/basic-machine-ext.scm")
 
 
 ;; 1. append
