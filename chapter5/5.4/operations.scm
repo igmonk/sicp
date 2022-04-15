@@ -1,5 +1,5 @@
-(load "list-utils.scm")
-(load "procedure.scm")
+(load "../5.4/list-utils.scm")
+(load "../5.4/procedure.scm")
 
 (define (self-evaluating? exp)
   (cond ((number? exp) true)

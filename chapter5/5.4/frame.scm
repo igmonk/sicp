@@ -3,7 +3,7 @@
 ;; A frame is represented as a list of bindings,
 ;; where each binding is a name-value pair.
 
-(load "frame-binding.scm")
+(load "../5.4/frame-binding.scm")
 
 (define (make-empty-frame) (make-frame '()))
 

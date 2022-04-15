@@ -1,14 +1,9 @@
 ;; Evaluator Machine Tests
-
-;; Load the evaluator machine
-;; (requires loading components from the directories that
-;; are not relative to the current one)
-;;
-;; Hence, go to evaluator-machine.scm and load the definitions
-;; as stated there. (Otherwise, consider making a library.)
 ;;
 ;; To reset the environment use the reset-env! procedure
 ;; (defined in evaluator-operations.scm).
+
+(load "evaluator-machine.scm")
 
 
 ;; Set the 'flag' register to start the machine

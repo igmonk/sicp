@@ -1,6 +1,6 @@
 ;; Procedure representation
 
-(load "list-utils.scm")
+(load "../5.4/list-utils.scm")
 
 ;; Compound procedure representation
 (define (make-procedure parameters body env)
