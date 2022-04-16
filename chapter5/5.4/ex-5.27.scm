@@ -6,7 +6,6 @@
 (load "evaluator-machine.scm")
 
 ;; Start the evaluator machine and run the driver loop:
-(set-register-contents! ec-eval-machine 'flag false)
 (start ec-eval-machine)
 
 (define (factorial n)

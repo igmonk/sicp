@@ -6,11 +6,6 @@
 (load "evaluator-machine.scm")
 
 
-;; Set the 'flag' register to start the machine
-;; at its ordinary read-eval-print loop
-;; (as opposed to the external-entry entry point):
-(set-register-contents! ec-eval-machine 'flag false)
-
 ;; Start the evaluator machine and run the driver loop:
 (start ec-eval-machine)
 
