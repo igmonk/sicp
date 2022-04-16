@@ -21,4 +21,4 @@
 ;; recursively and independently of each other, and so on.
 ;;
 ;; Therefore, the process to compute the nth Fibonacci number
-;; would have had θ(n^2) order of growth.
+;; would have had exponential order of growth.
