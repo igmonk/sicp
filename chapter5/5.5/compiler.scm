@@ -40,6 +40,7 @@
             (else false)))
 
     (define (variable? exp) (symbol? exp))
+
     (define (classify exp type)
       (if (pair? exp)
           (get type (car exp))
@@ -176,6 +177,10 @@
     ;;
     ;;  (test (op primitive-procedure?) (reg proc))
     ;;  (branch (label primitive-branch))
+    ;;  (test (op compiled-procedure?) (reg proc))
+    ;;  (branch (label compiled-branch))
+    ;; compound-branch
+    ;;  <code to apply compound procedure with given target and appropriate linkage>
     ;; compiled-branch
     ;;  <code to apply compiled procedure with given target and appropriate linkage>
     ;; primitive-branch
@@ -188,29 +193,76 @@
     (define (compile-procedure-call target linkage)
       (let ((primitive-branch (make-label 'primitive-branch))
             (compiled-branch (make-label 'compiled-branch))
+            (compound-branch (make-label 'compound-branch))
             (after-call (make-label 'after-call)))
-        (let ((compiled-linkage
+        (let ((non-primitive-linkage
                (if (eq? linkage 'next) after-call linkage)))
           (append-instruction-sequences
            (make-instruction-sequence
             '(proc) '()
             `((test (op primitive-procedure?) (reg proc))
-              (branch (label ,primitive-branch))))
+              (branch (label ,primitive-branch))
+              (test (op compiled-procedure?) (reg proc))
+              (branch (label ,compiled-branch))))
            (parallel-instruction-sequences
             (append-instruction-sequences
-             compiled-branch
-             (compile-proc-appl target compiled-linkage))
-            (append-instruction-sequences
-             primitive-branch
-             (end-with-linkage
-              linkage
-              (make-instruction-sequence
-               '(proc argl) (list target)
-               `((assign ,target
-                         (op apply-primitive-procedure)
-                         (reg proc)
-                         (reg argl)))))))
+             compound-branch
+             (compound-proc-appl target non-primitive-linkage))
+            (parallel-instruction-sequences
+             (append-instruction-sequences
+              compiled-branch
+              (compile-proc-appl target non-primitive-linkage))
+             (append-instruction-sequences
+              primitive-branch
+              (end-with-linkage
+               linkage
+               (make-instruction-sequence
+                '(proc argl) (list target)
+                `((assign ,target
+                          (op apply-primitive-procedure)
+                          (reg proc)
+                          (reg argl))))))))
            after-call))))
+
+
+    ;; Applying compound procedures
+    ;;
+    ;; The backbone is similar to the application of compiled
+    ;; procedures (see compile-proc-appl below).
+    ;;
+    ;; When the application of a compound procedure is complete,
+    ;; the controller transfers to the entry point specified by
+    ;; the saved continue, with the result of the application
+    ;; in val (see section 5.4).
+    (define (compound-proc-appl target linkage)
+      (cond ((and (eq? target 'val)
+                  (not (eq? linkage 'return)))
+             (make-instruction-sequence
+              '(proc) all-regs
+              `((assign continue (label ,linkage))
+                (save continue)
+                (goto (reg compapp)))))
+            ((and (not (eq? target 'val))
+                  (not (eq? linkage 'return)))
+             (let ((proc-return (make-label 'proc-return)))
+               (make-instruction-sequence
+                '(proc) all-regs
+                `((assign continue (label ,proc-return))
+                  (save continue)
+                  (goto (reg compapp))
+                  ,proc-return
+                  (assign ,target (reg val))
+                  (goto (label ,linkage))))))
+            ((and (eq? target 'val)
+                  (eq? linkage 'return))
+             (make-instruction-sequence
+              '(proc continue) all-regs
+              `((save continue)
+                (goto (reg compapp)))))
+            ((and (not (eq? target 'val))
+                  (eq? linkage 'return))
+             (error "return linkage, target not val -- COMPILE"
+                    target))))
 
 
     ;; Applying compiled procedures
