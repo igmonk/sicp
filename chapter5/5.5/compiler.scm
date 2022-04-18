@@ -34,6 +34,12 @@
             (else
              (error "Unknown expression type -- COMPILE" exp))))
 
+    (define (self-evaluating? exp)
+      (cond ((number? exp) true)
+            ((string? exp) true)
+            (else false)))
+
+    (define (variable? exp) (symbol? exp))
     (define (classify exp type)
       (if (pair? exp)
           (get type (car exp))
