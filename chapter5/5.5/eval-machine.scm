@@ -1,15 +1,33 @@
-;; Explicit-Control Evaluator
+;; Explicit-Control Evaluator (extended)
+;;
+;; To support the integration with the compiler (section 5.5.7),
+;; the explicit-control machine has been extended with two registers:
+;; - compapp - to store the compound-apply entry point
+;; - printres - to store the print-result entry point
 
 (load "../5.2/machine.scm")
 (load "../5.2/basic-machine-ext.scm")
 
 (load "../5.4/evaluator-operations.scm")
 
-(define ec-eval-machine
+(define ec-eval-ext-machine
   (make-machine
-   '(exp env val continue proc argl unev)
+   '(exp env val continue proc argl unev compapp printres)
    eceval-operations
    '(
+     ;; The register is used by the compiler to refer to
+     ;; the compound-apply entry point, which cannot be directly
+     ;; referenced in object code (since the assembler requires
+     ;; that all labels referenced by the code it is assembling
+     ;; be defined there).
+     (assign compapp (label compound-apply))
+
+     ;; The register is used by the compiler to refer to
+     ;; the print-result entry point.
+     (assign printres (label print-result))
+
+     (branch (label external-entry)) ; branches if flag is set
+
      ;; Driver loop
      ;;
      ;; - print a prompt
@@ -31,6 +49,16 @@
               (const ";;; EC-Eval value:"))
      (perform (op user-print) (reg val))
      (goto (label read-eval-print-loop))
+
+
+     ;; Assumes that the machine is started with 'val' containing
+     ;; the location of an instruction sequence that puts a result
+     ;; into 'val' and ends with (goto (reg continue)).
+     external-entry
+     (perform (op initialize-stack))
+     (assign env (op get-global-environment))
+     (assign continue (label print-result))
+     (goto (reg val))
 
      
      ;; Eval
@@ -151,13 +179,17 @@
      ;;
      ;; The saved value of 'continue' is on the stack.
      ;;
-     ;; Either the procedure to be applied is a primitive
-     ;; or it is a compound procedure.
+     ;; The procedure to be applied is one of
+     ;; - primitive
+     ;; - compound
+     ;; - compiled
      apply-dispatch
      (test (op primitive-procedure?) (reg proc))
      (branch (label primitive-apply))
      (test (op compound-procedure?) (reg proc))
      (branch (label compound-apply))
+     (test (op compiled-procedure?) (reg proc))
+     (branch (label compiled-apply))
      (goto (label unknown-procedure-type))
 
      primitive-apply
@@ -174,6 +206,16 @@
              (reg unev) (reg argl) (reg env))
      (assign unev (op procedure-body) (reg proc))
      (goto (label ev-sequence))
+
+     ;; Application of compiled procedures
+     ;;
+     ;; The compiled code entry point expects the continuation
+     ;; to be in continue => continue must be restored before
+     ;; the compiled code is executed.
+     compiled-apply
+     (restore continue)
+     (assign val (op compiled-procedure-entry) (reg proc))
+     (goto (reg val))
 
 
      ;; Sequence Evaluation and tail recursion
