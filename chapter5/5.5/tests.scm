@@ -103,3 +103,49 @@ ok
 55
 
 ;;; EC-Eval input:
+
+
+
+;; RCEPL machine
+(load "rcepl-machine.scm")
+
+;; Set flag to false and start the machine:
+(set-register-contents! rcepl-machine 'flag false)
+(start rcepl-machine)
+
+
+;;; EC-Eval input:
+(define (factorial n)
+  (if (= n 1)
+      1
+      (* (factorial (- n 1)) n)))
+
+(total-pushes = 0 maximum-depth = 0)
+;;; EC-Eval value:
+ok
+
+;;; EC-Eval input:
+(factorial 5)
+
+(total-pushes = 26 maximum-depth = 14)
+;;; EC-Eval value:
+120
+
+;;; EC-Eval input:
+(define (fib n)
+  (if (< n 2)
+      n
+      (+ (fib (- n 1)) (fib (- n 2)))))
+
+(total-pushes = 0 maximum-depth = 0)
+;;; EC-Eval value:
+ok
+
+;;; EC-Eval input:
+(fib 10)
+
+(total-pushes = 882 maximum-depth = 29)
+;;; EC-Eval value:
+55
+
+;;; EC-Eval input:
