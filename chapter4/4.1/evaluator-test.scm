@@ -182,6 +182,40 @@
 (eval-exp '(let* ((x 3)) (* x x))) ; 9
 
 
+;; Test: internal definitions (definitions come first)
+(eval-exp '(define (f x)
+             (define (even? n)
+               (if (= n 0)
+                   true
+                   (odd? (- n 1))))
+             (define (odd? n)
+               (if (= n 0)
+                   false
+                   (even? (- n 1))))
+             (even? x)))
+
+(eval-exp '(f 5)) ; false
+(eval-exp '(f 6)) ; true
+(reset-env!)
+
+
+;; Test: internal definitions (procedure calls come first)
+(eval-exp '(define (f x)
+             (even? x)
+             (define (even? n)
+               (if (= n 0)
+                   true
+                   (odd? (- n 1))))
+             (define (odd? n)
+               (if (= n 0)
+                   false
+                   (even? (- n 1))))))
+
+(eval-exp '(f 5)) ; false (if scan-out-defines is on. Otherwise: Unbound variable even?)
+(eval-exp '(f 6)) ; true (if scan-out-defines is on. Otherwise: Unbound variable even?)
+(reset-env!)
+
+
 ;; Test: letrec
 (eval-exp '(letrec ((fact
                      (lambda (n)

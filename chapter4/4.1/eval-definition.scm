@@ -9,6 +9,7 @@
         (_analyze (evaluator '_analyze))
         (extend-eval (evaluator 'extend-eval))
         (extend-analyze (evaluator 'extend-analyze))
+        (extend-syntax (evaluator 'extend-syntax))
         (def-constructor (evaluator 'def-constructor))
         (get-constructor (evaluator 'get-constructor)))
 
@@ -45,4 +46,6 @@
     
     (extend-eval 'define eval-definition)
     (extend-analyze 'define analyze-definition)
+    (extend-syntax 'definition-variable definition-variable)
+    (extend-syntax 'definition-value definition-value)
     (def-constructor 'make-define make-define)))
