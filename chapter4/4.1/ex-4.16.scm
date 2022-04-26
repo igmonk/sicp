@@ -17,4 +17,5 @@
 
 
 ;; See: environment.scm
-;;      letrec.scm
+;;      eval-lambda.scm
+;;      letrec.scm (as an alternative to inner definitions)
