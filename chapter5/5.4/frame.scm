@@ -30,6 +30,9 @@
             (else (cons (car bs)
                         (inner (cdr bs))))))
     (set! bindings (inner bindings)))
+
+  (define (bindings-ref index)
+    (list-ref bindings index))
   
   ;; Interface to the rest of the system
   (define (dispatch m)
@@ -37,6 +40,7 @@
           ((eq? m 'add-binding!) add-binding!)
           ((eq? m 'find-binding) find-binding)
           ((eq? m 'remove-binding!) remove-binding!)
+          ((eq? m 'bindings-ref) bindings-ref)
           (else (error "Unknown operation -- MAKE-FRAME" m))))
 
   dispatch)
@@ -55,3 +59,6 @@
 
 (define (remove-binding! var frame)
   ((frame 'remove-binding!) var))
+
+(define (bindings-ref index frame)
+  ((frame 'bindings-ref) index))
