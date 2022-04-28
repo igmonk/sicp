@@ -21,6 +21,7 @@
 
 (load "instruction-seq.scm")
 (load "instruction-comb.scm")
+(load "cenvironment.scm")
 
 (define (install-compile-lambda compiler)
   (let ((compile (compiler 'compile))
@@ -29,7 +30,7 @@
         (extend-compile (compiler 'extend-compile))
         (end-with-linkage (compiler 'end-with-linkage)))
 
-    (define (compile-lambda exp target linkage)
+    (define (compile-lambda exp target linkage cenv)
       (let ((proc-entry (make-label 'entry))
             (after-lambda (make-label 'after-lambda)))
         (let ((lambda-linkage
@@ -44,10 +45,10 @@
                         (op make-compiled-procedure)
                         (label ,proc-entry)
                         (reg env)))))
-            (compile-lambda-body exp proc-entry))
+            (compile-lambda-body exp proc-entry cenv))
            after-lambda))))
 
-    (define (compile-lambda-body exp proc-entry)
+    (define (compile-lambda-body exp proc-entry cenv)
       (let ((formals (lambda-parameters exp)))
         (append-instruction-sequences
          (make-instruction-sequence
@@ -59,7 +60,10 @@
                     (const ,formals)
                     (reg argl)
                     (reg env))))
-         (compile-sequence (lambda-body exp) 'val 'return))))
+         (compile-sequence (lambda-body exp)
+                           'val
+                           'return
+                           (extend-cenvironment formals cenv)))))
 
     (define (lambda-parameters exp) (cadr exp))
     (define (lambda-body exp) (cddr exp))

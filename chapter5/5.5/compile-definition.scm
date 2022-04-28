@@ -8,10 +8,10 @@
         (extend-compile (compiler 'extend-compile))
         (end-with-linkage (compiler 'end-with-linkage)))
 
-    (define (compile-definition exp target linkage)
+    (define (compile-definition exp target linkage cenv)
       (let ((var (definition-variable exp))
             (get-value-code
-             (compile (definition-value exp) 'val 'next)))
+             (compile (definition-value exp) 'val 'next cenv)))
         (end-with-linkage
          linkage
          (preserving

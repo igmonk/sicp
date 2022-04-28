@@ -6,6 +6,7 @@
 
 (load "eval-machine.scm")
 (load "instruction-seq.scm")
+(load "cenvironment.scm")
 
 ;; Note: the following error might get thrown (depends on
 ;; whether exercise 5.9 was done or not):
@@ -21,7 +22,9 @@
 
 ;; Requires 'compile' to be defined
 (define (compile-and-go exp)
-  (let* ((object-code (statements (compile exp 'val 'return)))
+  (let* ((object-code
+          (statements
+           (compile exp 'val 'return (make-cenvironment))))
          (instructions (assemble-object-code object-code)))
     (set! the-global-environment (setup-environment))
     (set-register-contents! ec-eval-ext-machine 'val instructions)

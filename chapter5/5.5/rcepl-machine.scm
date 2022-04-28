@@ -17,19 +17,23 @@
 (load "../5.4/evaluator-operations.scm")
 
 (load "compiler-factory.scm")
+(load "lexaddr-operations.scm")
+(load "cenvironment.scm")
 
 (define compile ((create-compiler) 'compile))
 
 (define (compile-and-assemble exp)
   (let ((assemble ((rcepl-machine 'assembler) 'assemble)))
     (assemble
-     (statements (compile exp 'val 'return)))))
+     (statements (compile exp 'val 'return (make-cenvironment))))))
 
 (define rcepl-machine
   (make-machine
    '(exp env val continue proc argl unev compapp printres)
-   (cons (list 'compile-and-assemble compile-and-assemble)
-         eceval-operations)
+   (append (list (list 'lexical-addr-lookup lexical-addr-lookup)
+                 (list 'lexical-addr-set! lexical-addr-set!)
+                 (list 'compile-and-assemble compile-and-assemble))
+           eceval-operations)
    '(
      ;; The register is used by the compiler to refer to
      ;; the compound-apply entry point, which cannot be directly

@@ -10,10 +10,14 @@
 
 (load "../5.4/evaluator-operations.scm")
 
+(load "lexaddr-operations.scm")
+
 (define ec-eval-ext-machine
   (make-machine
    '(exp env val continue proc argl unev compapp printres)
-   eceval-operations
+   (append (list (list 'lexical-addr-lookup lexical-addr-lookup)
+                 (list 'lexical-addr-set! lexical-addr-set!))
+           eceval-operations)
    '(
      ;; The register is used by the compiler to refer to
      ;; the compound-apply entry point, which cannot be directly

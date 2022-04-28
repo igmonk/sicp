@@ -1,6 +1,7 @@
 ;; Compiler Tests
 
 (load "compiler-factory.scm")
+(load "cenvironment.scm")
 (load "io-utils.scm")
 
 (define compiler1 (create-compiler))
@@ -13,7 +14,8 @@
           1
           (* (factorial (- n 1)) n)))
    'val
-   'next))
+   'next
+   (make-cenvironment)))
 
 ;; Save to a file if needed.
 (instruction-seq->file compiled-factorial "factorial.obj")
@@ -44,6 +46,26 @@ ok
 ;;
 ;; This illustrates the optimization that results from
 ;; the compilation strategy.
+
+
+;; Lexical addressing (section 5.5.6):
+
+((let ((x 3) (y 4))
+   (lambda (a b c d e)
+     (let ((y (* a b x))
+           (z (+ c d x)))
+       (* x y z))))
+ 1 2 3 4 5) ;; 180 / (total-pushes = 66 maximum-depth = 10)
+
+
+(((lambda (x y)
+    (lambda (a b c d e)
+      ((lambda (y z) (* x y z))
+       (* a b x)
+       (+ c d x))))
+  3
+  4)
+ 1 2 3 4 5) ;; 180 / (total-pushes = 66 maximum-depth = 10)
 
 
 

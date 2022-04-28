@@ -6,7 +6,7 @@
   (let ((extend-compile (compiler 'extend-compile))
         (end-with-linkage (compiler 'end-with-linkage)))
 
-    (define (compile-quoted exp target linkage)
+    (define (compile-quoted exp target linkage cenv)
       (end-with-linkage
        linkage
        (make-instruction-sequence

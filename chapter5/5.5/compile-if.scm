@@ -20,17 +20,17 @@
         (make-label (compiler 'make-label))
         (extend-compile (compiler 'extend-compile)))
     
-    (define (compile-if exp target linkage)
+    (define (compile-if exp target linkage cenv)
       (let ((t-branch (make-label 'true-branch))
             (f-branch (make-label 'false-branch))
             (after-if (make-label 'after-if)))
         (let ((consequent-linkage
                (if (eq? linkage 'next) after-if linkage)))
-          (let ((p-code (compile (if-predicate exp) 'val 'next))
+          (let ((p-code (compile (if-predicate exp) 'val 'next cenv))
                 (c-code
-                 (compile (if-consequent exp) target consequent-linkage))
+                 (compile (if-consequent exp) target consequent-linkage cenv))
                 (a-code
-                 (compile (if-alternative exp) target linkage)))
+                 (compile (if-alternative exp) target linkage cenv)))
             (preserving
              '(env continue)
              p-code
