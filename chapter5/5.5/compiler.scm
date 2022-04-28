@@ -5,6 +5,7 @@
 (load "list-utils.scm")
 (load "instruction-seq.scm")
 (load "instruction-comb.scm")
+(load "cenvironment.scm")
 
 (define (make-compiler)
   (let ((dt (make-table))
@@ -22,15 +23,15 @@
        (string-append (symbol->string name)
                       (number->string (new-label-number)))))
 
-    (define (compile exp target linkage)
+    (define (compile exp target linkage cenv)
       (cond ((self-evaluating? exp)
              (compile-self-evaluating exp target linkage))
             ((variable? exp)
-             (compile-variable exp target linkage))
+             (compile-variable exp target linkage cenv))
             ((classify exp 'compile)
-             ((classify exp 'compile) exp target linkage))
+             ((classify exp 'compile) exp target linkage cenv))
             ((application? exp)
-             (compile-application exp target linkage))
+             (compile-application exp target linkage cenv))
             (else
              (error "Unknown expression type -- COMPILE" exp))))
 
@@ -70,23 +71,29 @@
         '() (list target)
         `((assign ,target (const ,exp))))))
 
-    (define (compile-variable exp target linkage)
-      (end-with-linkage
-       linkage
-       (make-instruction-sequence
-        '(env) (list target)
-        `((assign ,target
-                  (op lookup-variable-value)
-                  (const ,exp)
-                  (reg env))))))
+    (define (compile-variable exp target linkage cenv)
+      (let ((lexaddr (find-variable exp cenv)))
+        (end-with-linkage
+         linkage
+         (make-instruction-sequence
+          '(env) (list target)
+          (if (eq? 'not-found lexaddr)
+              `((assign ,target
+                        (op lookup-variable-value)
+                        (const ,exp)
+                        (reg env)))
+              `((assign ,target
+                        (op lexical-addr-lookup)
+                        (const ,lexaddr)
+                        (reg env))))))))
 
-    (define (compile-sequence seq target linkage)
+    (define (compile-sequence seq target linkage cenv)
       (if (last-exp? seq)
-          (compile (first-exp seq) target linkage)
+          (compile (first-exp seq) target linkage cenv)
           (preserving
            '(env continue)
-           (compile (first-exp seq) target 'next)
-           (compile-sequence (rest-exps seq) target linkage))))
+           (compile (first-exp seq) target 'next cenv)
+           (compile-sequence (rest-exps seq) target linkage cenv))))
 
     
     ;; The code for a combination compiled with a given target
@@ -104,10 +111,10 @@
     ;; needed for the actual procedure application).
     ;; continue must also be preserved throughout, since it is needed for
     ;; the linkage in the procedure call.
-    (define (compile-application exp target linkage)
-      (let ((proc-code (compile (operator exp) 'proc 'next))
+    (define (compile-application exp target linkage cenv)
+      (let ((proc-code (compile (operator exp) 'proc 'next cenv))
             (operand-codes
-             (map (lambda (operand) (compile operand 'val 'next))
+             (map (lambda (operand) (compile operand 'val 'next cenv))
                   (operands exp))))
         (preserving
          '(env continue)

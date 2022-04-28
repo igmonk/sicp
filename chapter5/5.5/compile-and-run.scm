@@ -18,7 +18,7 @@
 
 
 ;; The last two instructions restore the register continue
-;; and unconditionally branch to what it refer to:
+;; and unconditionally branch to what it refers to:
 ;;
 ;; (restore continue)
 ;; (goto (reg continue))
@@ -26,11 +26,14 @@
 ;; Hence, we need to replace the top of the stack with
 ;; what needs to be executed next: the assembled instructions.
 
+(load "cenvironment.scm")
+
 (define (compile-and-run exp)
   (let ((stack (ec-eval-ext-machine 'stack))
         (instructions
          (assemble-object-code
-          (append (statements (compile exp 'val 'next))
+          (append (statements
+                   (compile exp 'val 'next (make-cenvironment)))
                   '((goto (reg printres)))))))
     
     ;; Optionally remove the old value of continue from
