@@ -7,7 +7,8 @@
 (define (install-compile-assignment compiler)
   (let ((compile (compiler 'compile))
         (extend-compile (compiler 'extend-compile))
-        (end-with-linkage (compiler 'end-with-linkage)))
+        (end-with-linkage (compiler 'end-with-linkage))
+        (def-constructor (compiler 'def-constructor)))
 
     (define (compile-assignment exp target linkage cenv)
       (let ((var (assignment-variable exp))
@@ -39,4 +40,5 @@
     (define (assignment-variable exp) (cadr exp))
     (define (assignment-value exp) (caddr exp))
 
-    (extend-compile 'set! compile-assignment)))
+    (extend-compile 'set! compile-assignment)
+    (def-constructor 'make-set! make-set!)))

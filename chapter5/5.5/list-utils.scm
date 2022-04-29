@@ -28,3 +28,16 @@
         (else
          (cons (car s1)
                (list-difference (cdr s1) s2)))))
+
+
+;; Decouple pairs: iterative
+
+(define (decouple-pairs pairs)
+  (define (inner rest l1 l2)
+    (if (null? rest)
+        (list l1 l2)
+        (let ((pair (car rest)))
+          (inner (cdr rest)
+                 (append l1 (list (car pair)))
+                 (append l2 (list (cadr pair)))))))
+  (inner pairs '() '()))
