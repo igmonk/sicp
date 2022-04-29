@@ -6,7 +6,10 @@
 (define (install-compile-definition compiler)
   (let ((compile (compiler 'compile))
         (extend-compile (compiler 'extend-compile))
-        (end-with-linkage (compiler 'end-with-linkage)))
+        (end-with-linkage (compiler 'end-with-linkage))
+        (def-constructor (compiler 'def-constructor))
+        (get-constructor (compiler 'get-constructor))
+        (extend-syntax (compiler 'extend-syntax)))
 
     (define (compile-definition exp target linkage cenv)
       (let ((var (definition-variable exp))
@@ -36,7 +39,14 @@
           (make-lambda (cdadr exp)   ; formal parameters
                        (cddr exp)))) ; body
 
-    (define (make-lambda parameters body)
-      (cons 'lambda (cons parameters body)))
+    (define (make-define var value)
+      (cons 'define (cons var value)))
 
-    (extend-compile 'define compile-definition)))
+    ;; Dependency constructors
+    (define (make-lambda . args)
+      (apply (get-constructor 'make-lambda) args))
+
+    (extend-compile 'define compile-definition)
+    (extend-syntax 'definition-variable definition-variable)
+    (extend-syntax 'definition-value definition-value)
+    (def-constructor 'make-define make-define)))

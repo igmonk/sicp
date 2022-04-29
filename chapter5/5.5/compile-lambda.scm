@@ -28,7 +28,10 @@
         (compile-sequence (compiler 'compile-sequence))
         (make-label (compiler 'make-label))
         (extend-compile (compiler 'extend-compile))
-        (end-with-linkage (compiler 'end-with-linkage)))
+        (end-with-linkage (compiler 'end-with-linkage))
+        (def-constructor (compiler 'def-constructor))
+        (get-constructor (compiler 'get-constructor))
+        (get-syntax (compiler 'get-syntax)))
 
     (define (compile-lambda exp target linkage cenv)
       (let ((proc-entry (make-label 'entry))
@@ -60,12 +63,59 @@
                     (const ,formals)
                     (reg argl)
                     (reg env))))
-         (compile-sequence (lambda-body exp)
+         (compile-sequence (scan-out-defines
+                            (lambda-body exp))
                            'val
                            'return
                            (extend-cenvironment formals cenv)))))
 
+    ;; Scans the procedure body with internal definitions
+    ;;
+    ;; (lambda <vars>
+    ;;   (define u <e1>)
+    ;;   (define v <e2>)
+    ;;   <e3>)
+    ;;
+    ;; and returns a let-equivalent without internal definitions
+    ;;
+    ;; (lambda <vars>
+    ;;   (let ((u '*unassigned*)
+    ;;         (v '*unassigned*))
+    ;;     (set! u <e1>)
+    ;;     (set! v <e2>)
+    ;;     <e3>))
+    (define (scan-out-defines proc-body)
+      (let ((defines (filter define? proc-body)))
+        (if (null? defines)
+            proc-body
+            (let ((other-exps (remove define? proc-body))
+                  (def-vars (map (get-syntax 'definition-variable) defines))
+                  (def-vals (map (get-syntax 'definition-value) defines)))
+              (list ; list since it still is a procedure body (sequence)
+               (make-let
+                (map var->unassigned-pair def-vars)
+                (append (map var-val->make-set! def-vars def-vals)
+                        other-exps)))))))
+
+    (define (define? exp) (tagged-list? exp 'define))
+
+    (define (var->unassigned-pair var)
+      (list var (quote '*unassigned*)))
+
+    (define (var-val->make-set! var val)
+      (make-set! var (list val)))
+
+    ;; Dependency constructors
+    (define (make-let . args)
+      (apply (get-constructor 'make-let) args))
+    (define (make-set! . args)
+      (apply (get-constructor 'make-set!) args))
+
+    (define (make-lambda parameters body)
+      (cons 'lambda (cons parameters body)))
+
     (define (lambda-parameters exp) (cadr exp))
     (define (lambda-body exp) (cddr exp))
 
-    (extend-compile 'lambda compile-lambda)))
+    (extend-compile 'lambda compile-lambda)
+    (def-constructor 'make-lambda make-lambda)))
