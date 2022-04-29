@@ -331,12 +331,26 @@
     (define (extend-compile type proc)
       (put 'compile type proc))
 
+    (define (def-constructor type proc)
+      (put 'constructor type proc))
+    (define (get-constructor type)
+      (get 'constructor type))
+
+    (define (extend-syntax type proc)
+      (put 'syntax type proc))
+    (define (get-syntax type)
+      (get 'syntax type))
+
     (define (dispatch m)
       (cond ((eq? m 'compile) compile)
             ((eq? m 'extend-compile) extend-compile)
             ((eq? m 'end-with-linkage) end-with-linkage)
             ((eq? m 'compile-sequence) compile-sequence)
             ((eq? m 'make-label) make-label)
+            ((eq? m 'def-constructor) def-constructor)
+            ((eq? m 'get-constructor) get-constructor)
+            ((eq? m 'extend-syntax) extend-syntax)
+            ((eq? m 'get-syntax) get-syntax)
             (else
              (error "Unknown operation -- MAKE-COMPILER" m))))
 
