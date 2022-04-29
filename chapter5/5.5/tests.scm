@@ -171,3 +171,38 @@ ok
 55
 
 ;;; EC-Eval input:
+
+
+
+;; Internal definitions (definitions come first)
+
+(define (f x)
+  (define (even? n)
+    (if (= n 0)
+        true
+        (odd? (- n 1))))
+  (define (odd? n)
+    (if (= n 0)
+        false
+        (even? (- n 1))))
+  (even? x))
+
+(f 5) ; false / (total-pushes = 22 maximum-depth = 2)
+(f 6) ; true / (total-pushes = 26 maximum-depth = 2)
+
+
+;; Internal definitions (procedure calls come first)
+
+(define (f x)
+  (even? x)
+  (define (even? n)
+    (if (= n 0)
+        true
+        (odd? (- n 1))))
+  (define (odd? n)
+    (if (= n 0)
+        false
+        (even? (- n 1)))))
+
+(f 5) ; false / (total-pushes = 22 maximum-depth = 2)
+(f 6) ; true / (total-pushes = 26 maximum-depth = 2)
