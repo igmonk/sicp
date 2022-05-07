@@ -14,6 +14,9 @@
 
 (define (identity x) x)
 
+(define (average a b)
+  (/ (+ a b) 2))
+
 (define (fib-iter a b n)
   (if (> n 0)
       (fib-iter (+ a b) a (- n 1))
@@ -32,6 +35,11 @@
 
 (define (divisible? n divisor)
   (= (remainder n divisor) 0))
+
+(define (gcd a b)
+  (if (= b 0)
+      a
+      (gcd b (remainder a b))))
 
 (define (accumulate op initial sequence)
   (if (null? sequence)
