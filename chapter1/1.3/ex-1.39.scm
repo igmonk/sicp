@@ -10,6 +10,9 @@
 ;; based on Lambert's formula.
 ;; k specifies the number of terms to compute, as in exercise 1.37.
 
+
+(load "../../common.scm")
+
 ;; Let's find out the dependency between the index i and Ni
 ;;
 ;; i = 1 => Ni = x
@@ -67,9 +70,3 @@
 ;; (tan-cf 10 100) ; .6483608274590866
 ;; (tan-cf 11 100) ; -225.95084645419442
 ;; (tan-cf 99 100) ; 3.6985877190032097
-
-
-;; Utils
-
-(define (square x)
-  (* x x))

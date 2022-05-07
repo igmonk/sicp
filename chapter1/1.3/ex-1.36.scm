@@ -10,6 +10,8 @@
 ;; division by log(1) = 0.)
 
 
+(load "../../common.scm")
+
 ;; Putting the equation x^x = 1000 into the equivalent form:
 ;;
 ;; x^x = 1000
@@ -112,6 +114,3 @@
 	  next
 	  (try next))))
   (try first-guess))
-
-(define (average a b)
-  (/ (+ a b) 2))

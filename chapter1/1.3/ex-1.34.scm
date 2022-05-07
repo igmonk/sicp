@@ -5,6 +5,8 @@
 (define (f g)
   (g 2))
 
+(load "../../common.scm")
+
 ;; Then we have
 ;;
 ;; (f square)                     ; 4
@@ -19,9 +21,3 @@
 ;;
 ;; The exact message returned by the interpreter:
 ;; The object 2 is not applicable.
-
-
-;; Utils
-
-(define (square x)
-  (* x x))

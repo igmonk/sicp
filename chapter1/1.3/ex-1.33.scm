@@ -15,6 +15,7 @@
 ;; b. the product of all the positive integers less than n that are relatively prime to n
 ;; (i.e., all positive integers i < n such that GCD(i,n) = 1).
 
+(load "../../common.scm")
 
 ;; filtered-accumulate (recursive process)
 
@@ -80,7 +81,7 @@
 
 (define (product-pos-integers-prime-n n)
   (define (pos-integer-prime-to-n? x)
-    (and (positive? x) (= (gcd x n) 1))
+    (and (positive? x) (= (gcd x n) 1)))
   (product identity 1 inc (- n 1) pos-integer-prime-to-n?))
 
 ;; (product-pos-integers-prime-n 0)  ; 1
@@ -94,25 +95,3 @@
 ;; (product-pos-integers-prime-n 8)  ; 105  = 1 * 3 * 5 * 7
 ;; (product-pos-integers-prime-n 9)  ; 2240 = 1 * 2 * 4 * 5 * 7 * 8
 ;; (product-pos-integers-prime-n 10) ; 189  = 1 * 3 * 7 * 9
-
-
-;; Utils
-(define (identity x) x)
-(define (inc n) (+ n 1))
-(define (square x) (* x x))
-
-(define (prime? n)
-  (not (div-iter n 2)))
-
-(define (div-iter n divisor)
-  (cond ((< n (square divisor)) false)
-	((divisible? n divisor) true)
-	(else (div-iter n (+ divisor 1)))))
-
-(define (divisible? n divisor)
-  (= (remainder n divisor) 0))
-
-(define (gcd a b)
-  (if (= b 0)
-      a
-      (gcd b (remainder a b))))
